@@ -1,0 +1,80 @@
+$(function () {
+    setListWidth()
+    layout()
+})
+function setListWidth() {
+    //设置滚动条不出现
+    $("#fixedList-bd").addClass("scroll");
+
+    var winWidth = $(window).outerWidth(true);
+    var winHeight = $(window).outerHeight(true);
+    var toolbarHeight = $(".toolbar").outerHeight(true);   //获取工具栏的高度
+    var searchbarHeight = $("#searchbar").outerHeight(true);//获取搜索工具栏的高度
+   
+    var paginationHeight = $("#pagination").outerHeight(true);//获取分页部分的高度
+    if (toolbarHeight == null) {
+        toolbarHeight = 0;
+    }
+    if (searchbarHeight == null) {
+        searchbarHeight = 0;
+    }
+    if (paginationHeight == null) {
+        paginationHeight = 0;
+    }
+
+    var fixedListContainHeight = winHeight - toolbarHeight - searchbarHeight - paginationHeight - 2;
+    //console.log(paginationHeight, fixedListContainHeight)
+   
+    //得到头部表格总宽度 headTotalWidth
+    var headTotalWidth = 0;  //头部表格出去最后一列的总宽度
+    $("#fixedList-hd-table thead tr:eq(0) td").each(function (index) {
+        var width = $(this).outerWidth();
+        headTotalWidth += width;
+    })
+
+    //默认状态表格设置为100%，header部分与body均为100%
+    $("#fixedList-hd-table,#fixedList-bd,#fixedList-hd,#fixedList-bd-table").outerWidth("100%");    //设置header与body的宽度
+    //如果header的宽度大于窗口的宽度
+    if (headTotalWidth > winWidth) {
+        $("#fixedList-bd").width(headTotalWidth );
+        $("#fixedList-hd-table").width(headTotalWidth);   //设置header部分宽度
+        $("#fixedList-bd-table").width(headTotalWidth);   //设置header部分宽度
+        //$("#overScroll").css("display","block")
+    }
+    //给固定列表设置高度（列表容器高）
+    $("#fixedList-container").outerHeight(fixedListContainHeight);
+    //获取固定列表的头部高度
+    var fixedListHDHeight = $("#fixedList-hd-table").outerHeight(true);
+    //设置固定列表内容部分高度（固定列表容器高-固定列表头部高）
+    $("#fixedList-bd").outerHeight(fixedListContainHeight - fixedListHDHeight);
+    //设置列表内容部分每列的宽度与头部对应的列宽度相等
+    $("#fixedList-hd-table thead td").each(function (index) {  
+        var width = $(this).outerWidth();
+        $("#fixedList-bd-table  td").eq(index).outerWidth(width)
+    })
+    //设置模拟滚动条的高度
+    var obj = $("#fixedList-bd");
+    $("#overScroll").outerHeight(fixedListContainHeight - fixedListHDHeight) 
+    $("#overScroll").css("top", toolbarHeight + searchbarHeight + fixedListHDHeight)
+    $("#overScrollContent").height($("#fixedList-bd-table").outerHeight(true))
+    $("#overScroll").scroll(function (event) {
+        $("#overScroll").scrollTop(event.target.scrollTop);
+        $("#overScroll").css("right","3px")
+        obj.scrollTop(event.target.scrollTop);
+    })
+    //将模拟滚动条与滑轮关联
+    document.getElementById("fixedList-bd").onmousewheel = function () {
+        var scrollY=$("#fixedList-bd").scrollTop()
+        $("#overScroll").scrollTop(scrollY);
+    }
+
+}
+
+function layout() {
+    window.onresize = function () {
+        setListWidth();
+    };
+    window.onload = function () {
+        setListWidth();
+    }
+}
