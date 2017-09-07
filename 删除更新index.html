@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Document</title>
+	</head>
+
+	<body>
+		<table>
+			<tr>
+				<td>
+					<input type="checkbox" name="key" />1
+				</td>
+				<td>
+					张三
+				</td>
+				<td><a href="#" class="del">删除</a></td>
+			</tr>
+			<tr>
+				<td>
+					<input type="checkbox" name="key" />2
+				</td>
+				<td>
+					李四
+				</td>
+				<td><a href="#" class="del">删除</a></td>
+			</tr>
+			<tr>
+				<td>
+					<input type="checkbox" name="key" />3
+				</td>
+				<td>
+					王武
+				</td>
+				<td><a href="#" class="del">删除</a></td>
+			</tr>
+			<tr>
+				<td>
+					<input type="checkbox" name="key" />4
+				</td>
+				<td>
+					赵柳
+				</td>
+				<td><a href="#" class="del" >删除</a></td>
+			</tr>
+			<tr>
+				<td>
+					<input type="checkbox" name="key" />5
+				</td>
+				<td>
+					姓名
+				</td>
+				<td><a href="#" class="del">删除</a></td>
+			</tr>
+		</table>
+		<script src="jquery-2.1.4.min.js"></script>
+		<script>
+			$(".del").click(function() {
+				var wrap = $(this).parents("table");
+				$(this).parents("tr").remove();
+				var index = $(wrap).find("tr").length;
+				$(wrap).find("tr").each(function(index) {
+					$(this).children().first().text(++index);
+				})
+
+			})
+		</script>
+	</body>
+
+</html>
