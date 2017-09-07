@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>Document</title>
+	<style>
+		a{
+			color:#333;
+			text-decoration: none;
+		}
+		table td{
+			padding:5px 
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<input type="checkbox" id="checkAll" /><label for="checkAll">全选</label>
+		<a href="#" style="margin-left: 10px;" class="delAll">删除</a>
+	</div>
+	<div>
+		<table style="border:1px solid #ccc">
+			<tr>
+				<td>
+					<input type="checkbox" name="key" />1
+				</td>
+				<td>
+					张三
+				</td>
+				<td>中学</td>
+				<td><a href="#" class="del" onclick="delect(this)">删除</a></td>
+			</tr>
+			<tr>
+				<td>
+					<input type="checkbox" name="key" />2
+				</td>
+				<td>
+					李四
+				</td>
+				<td>中学</td>
+				<td><a href="#" class="del" onclick="delect(this)">删除</a></td>
+			</tr>
+			<tr>
+				<td>
+					<input type="checkbox" name="key" />3
+				</td>
+				<td>
+					王武
+				</td>
+				<td>中学</td>
+				<td><a href="#" class="del" onclick="delect(this)">删除</a></td>
+			</tr>
+			<tr>
+				<td>
+					<input type="checkbox" name="key" />4
+				</td>
+				<td>
+					赵柳
+				</td>
+				<td>中学</td>
+				<td><a href="#" class="del" onclick="delect(this)">删除</a></td>
+			</tr>
+			<tr>
+				<td>
+					<input type="checkbox" name="key" />5
+				</td>
+				<td>
+					姓名
+				</td>
+				<td>中学</td>
+				<td><a href="#" class="del" onclick="delect(this)">删除</a></td>
+			</tr>
+		</table>
+	</div>
+	<script src="jquery-2.1.4.min.js"></script>
+	<script>
+		
+		checkAll("input[type=checkbox][name='key']", "#checkAll")
+		
+		//封装全选功能
+        function checkAll(ele, allele) {
+            //allele为全选按钮的id
+            //ele为全部的checkbox的集合
+            $(allele).on("click", function () {
+                var _this = this;
+                $(ele).each(function (index, value) {
+                    value.checked = _this.checked;
+                })
+            })
+            $(ele).on("click", function () {
+                var checkboxs = $(ele);
+                var checkeds = ele + ":checked";
+                var checkboxsc = $(checkeds);
+                if (checkboxsc.length == checkboxs.length) {
+                    $(allele).get(0).checked = true;
+                } else {
+                    $(allele).get(0).checked = false;
+                }
+            })
+        }
+        
+        /* 封装删除函数  */
+        function delect(ele){
+			var tableWrap = $(ele).parents("table");
+			$(ele).parents("tr").remove();
+			var index = $(tableWrap).find("tr").length;
+			$(tableWrap).find("tr").each(function(index) {
+				index=++index;
+				$(this).children().first().html("<input type='checkbox' id='"+index+"' name='key'>"+index);
+			})
+			
+			checkAll("input[type=checkbox][name='key']", "#checkAll")
+        }
+        $(".delAll").on("click",function(){
+        	$("table input[type=checkbox]").each(function(index,item){
+        		if($(this).prop("checked")){
+        			$(this).parents("tr").remove();
+        		}
+        	})
+     		$("table tr").each(function(index){
+     			index=++index;
+     			$(this).children().first().html("<input type='checkbox' id='"+index+"' name='key'>"+index);
+     		})
+     		checkAll("input[type=checkbox][name='key']", "#checkAll")
+        })
+        
+	</script>
+</body>
+</html>
